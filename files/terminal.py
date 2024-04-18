@@ -38,17 +38,21 @@ else:
                 vr("held_st", None)
                 term.write("To disconnect, hold down Ctrl-Q.\n" + "-" * 32)
                 while vr("cont"):
+                    be.io.ledset(1)
                     try:
                         while vr("cont"):
                             try:
+                                if term.is_interrupted():
+                                    raise KeyboardInterrupt
                                 vr("dat", term.console.read(term.console.in_waiting))
                                 if vr("dat"):
+                                    be.io.ledset(3)
                                     vr("datl", list(vr("dat")))
-                                    if vr("datl") == [17]:
+                                    if set(vr("datl")) == set([17]):
                                         if not vr("held"):
-                                            vrp("held")
+                                            vrp("held", vr("datl").count(17))
                                             vr("held_st", time.monotonic())
-                                        elif vr("held") > 19:
+                                        elif vr("held") > 9:
                                             vr("cont", False)
                                             term.write(
                                                 "\n" + "-" * 32 + "\nRelease to quit."
@@ -69,9 +73,10 @@ else:
                                             vr("held", 0)
                                             vr("con").write(b"\x11")
                                         vr("con").write(vr("dat"))
+                                    be.io.ledset(1)
                                 elif (
                                     vr("held")
-                                    and time.monotonic() - vr("held_st") > 0.3
+                                    and time.monotonic() - vr("held_st") > 1
                                 ):
                                     vr("held", 0)
                                     vr("con").write(b"\x11")
@@ -79,7 +84,9 @@ else:
                                 if vr("dat"):
                                     term.console.write(vr("dat"))
                             except KeyboardInterrupt:
+                                be.io.ledset(3)
                                 vr("con").write(b"\x03")
+                                be.io.ledset(1)
                     except KeyboardInterrupt:
                         vr("con").write(b"\x03")
             else:
