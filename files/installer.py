@@ -1,6 +1,12 @@
-print("""
-    This script is run during the first install of the package.
-    
-    You should copy the files you want in the system from here.
-    You should NOT bother with the manifest or the uninstall files from here.
-""")
+for pv[get_pid()]["f"] in [
+    "mkuart.lja",
+    "mkuart.py",
+    "rmuart.lja",
+    "rmuart.py",
+    "terminal.lja",
+    "terminal.py",
+]:
+    be.based.run("cp " + vr("f") + " /bin/" + vr("f"))
+be.based.run("cp mkuart.txt /usr/share/help/mkuart.txt")
+
+be.api.setvar("return", "0")

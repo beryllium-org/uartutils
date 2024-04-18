@@ -1,7 +1,3 @@
-print("""
-    This script is run when a users uninstalls the package.
-    
-    It will not run during an update.
-    Here you should purge all the files you installed with your install script.
-    Do not nuke the system.
-""")
+be.based.rm("rm /bin/mkuart.lja /bin/mkuart.py /bin/rmuart.lja /bin/rmuart.py /bin/terminal.lja /bin/terminal.py /usr/share/help/mkuart.txt")
+
+be.api.setvar("return", "0")
