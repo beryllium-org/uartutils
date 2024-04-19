@@ -42,15 +42,16 @@ else:
                     try:
                         while vr("cont"):
                             try:
-                                if term.is_interrupted():
-                                    raise KeyboardInterrupt
                                 vr("dat", term.console.read(term.console.in_waiting))
                                 if vr("dat"):
+                                    if b"\n" in vr("dat"):
+                                        vr("dat", vr("dat").replace(b"\n", b"\r"))
                                     be.io.ledset(3)
                                     vr("datl", list(vr("dat")))
-                                    if set(vr("datl")) == set([17]):
+                                    vr("17c", vr("datl").count(17))
+                                    if vr("17c") == len(vr("datl")):
                                         if not vr("held"):
-                                            vrp("held", vr("datl").count(17))
+                                            vrp("held", vr("17c"))
                                             vr("held_st", time.monotonic())
                                         elif vr("held") > 9:
                                             vr("cont", False)
